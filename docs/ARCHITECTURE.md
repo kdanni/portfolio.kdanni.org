@@ -72,11 +72,35 @@ graph LR
 
 ```mermaid
 erDiagram
+    ASSETS ||--o{ LISTINGS : has
+    EXCHANGES ||--o{ LISTINGS : lists
+
     ASSETS {
         int id PK
-        string ticker UK "Unique, >0 char"
         string name ">0 char"
-        string asset_class "e.g. Equity, Bond"
+        enum asset_class "EQUITY, BOND, etc"
+        string isin "Unique, Nullable"
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    EXCHANGES {
+        int id PK
+        string name ">0 char"
+        string mic_code "Unique, >0 char"
+        string currency
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    LISTINGS {
+        int id PK
+        int asset_id FK
+        int exchange_id FK
+        string ticker ">0 char"
+        string currency
         boolean is_active
         datetime created_at
         datetime updated_at
@@ -90,19 +114,40 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-
-    %% Future Phase: PORTFOLIO_ASSETS (Holdings)
-    %% PORTFOLIOS ||--o{ PORTFOLIO_ASSETS : contains
-    %% ASSETS ||--o{ PORTFOLIO_ASSETS : is_held_in
 ```
 
 ### 3.2 Table Definitions
 
 #### `assets` (Existing)
-*   **Source of Truth** for financial instruments.
-*   **Constraints**: Ticker must be unique. Ticker and Name cannot be empty.
+*   **Source of Truth** for financial instruments (e.g. a Company, a Fund).
+*   **Columns**:
+    *   `id`: Serial PK.
+    *   `name`: String(255), Not Null.
+    *   `asset_class`: Enum (EQUITY, CRYPTO, FX, etc), Not Null.
+    *   `isin`: String(12), Nullable, Unique.
+    *   `is_active`: Boolean.
+*   **Constraints**: Name length > 0.
 
-#### `portfolios` (New)
+#### `exchanges` (Existing)
+*   **Purpose**: Defines where assets are traded.
+*   **Columns**:
+    *   `id`: Serial PK.
+    *   `name`: String(255), Not Null.
+    *   `mic_code`: String(20), Unique, Not Null.
+    *   `currency`: String(10), Not Null.
+*   **Constraints**: MIC Code and Name length > 0.
+
+#### `listings` (Existing)
+*   **Purpose**: Connects an Asset to an Exchange with a specific Ticker.
+*   **Columns**:
+    *   `id`: Serial PK.
+    *   `asset_id`: FK to assets.
+    *   `exchange_id`: FK to exchanges.
+    *   `ticker`: String(20), Not Null.
+    *   `currency`: String(10), Not Null (Trading currency).
+*   **Constraints**: Ticker length > 0. Unique (Ticker + Exchange).
+
+#### `portfolios` (Future)
 *   **Purpose**: Container for user holdings.
 *   **Columns**:
     *   `id`: Serial PK.

@@ -51,7 +51,19 @@ AssetManager is a lightweight, robust backend system for managing financial asse
     poetry run alembic upgrade head
     ```
 
-3.  **Node.js Setup** (Optional/Future):
+3.  **Run the API Server**:
+    To start the FastAPI development server:
+    ```bash
+    # From src/python
+    poetry run fastapi dev api/main.py
+    ```
+    Or using uvicorn directly:
+    ```bash
+    poetry run uvicorn api.main:app --reload
+    ```
+    The API will be available at `http://localhost:8000`. API Docs are at `http://localhost:8000/docs`.
+
+4.  **Node.js Setup** (Optional/Future):
     ```bash
     cd src/node
     npm install
