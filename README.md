@@ -32,7 +32,7 @@ We are following an incremental development path.
 
 ### Phase 1: Initialization & Design (📍 WE ARE HERE)
 - [x] Create Repository & README
-- [ ] **Task 1.1:** Define Technical Requirements (Latency, Persistence, Scalability).
+- [x] **Task 1.1:** Define Technical Requirements (Latency, Persistence, Scalability). (See [docs/TECHNICAL_REQUIREMENTS.md](docs/TECHNICAL_REQUIREMENTS.md))
 - [ ] **Task 1.2:** Select Technology Stack (Language, Framework, DB).
 - [ ] **Task 1.3:** Design High-Level IT Architecture.
 - [ ] **Task 1.4:** Design Domain Schema (ERD) for Catalog and Portfolio.
