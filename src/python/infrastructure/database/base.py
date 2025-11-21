@@ -1,4 +1,8 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv() 
+
 from sqlalchemy import MetaData, create_engine
 from sqlalchemy.orm import DeclarativeBase
 

@@ -17,6 +17,24 @@ AssetManager is a lightweight, robust backend system for managing financial asse
 *   Python 3.12+ & Poetry
 *   Node.js LTS & npm
 
+#### Install Poetry
+- On Windows:
+    - Install `pipx`
+        - Install via Scoop:
+            - Install scoop
+            ```powershell
+            Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+            Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+            ```
+        ```
+        scoop install pipx
+        pipx ensurepath
+        ```
+    ```
+    pipx install poetry
+    ```
+
+
 ### Environment Setup
 
 1.  **Start the Database**:
