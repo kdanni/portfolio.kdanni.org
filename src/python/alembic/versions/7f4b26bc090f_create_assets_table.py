@@ -32,7 +32,7 @@ def upgrade() -> None:
     sa.CheckConstraint('length(name) > 0', name='check_name_length'),
     sa.CheckConstraint('length(ticker) > 0', name='check_ticker_length'),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('ticker')
+    sa.UniqueConstraint('ticker', name='uq_assets_ticker')
     )
     # ### end Alembic commands ###
 
