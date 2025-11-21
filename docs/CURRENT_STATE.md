@@ -38,7 +38,9 @@ The repository is organized into source code (`src`), documentation (`docs`), an
 *   **Migrations:** Alembic (configured).
 *   **Dependencies:** Managed via `poetry` (`pyproject.toml` present).
 *   **Implemented Code:**
-    *   `AssetModel` (`src/python/infrastructure/database/models.py`): Defines the `assets` table with columns (`id`, `ticker`, `name`, `asset_class`, `is_active`) and CHECK constraints.
+    *   `AssetModel` (`src/python/infrastructure/database/models.py`): Defines the `assets` table.
+    *   `ExchangeModel`: Defines the `exchanges` table.
+    *   `ListingModel`: Defines the `listings` table.
 
 ### 3.3 Node.js Backend (Secondary)
 *   **Status:** Initial Setup.
@@ -48,17 +50,24 @@ The repository is organized into source code (`src`), documentation (`docs`), an
 *   **Implemented Code:** None (scaffold only).
 
 ## 4. Database Schema Snapshot
-Currently, the schema defines a single entity: **Assets**.
+Currently, the schema defines three core entities: **Assets**, **Exchanges**, and **Listings**.
 
-| Table  | Column | Type | Constraints |
+| Table | Column | Type | Constraints |
 | :--- | :--- | :--- | :--- |
 | **assets** | `id` | Integer | PK, Auto-inc |
-| | `ticker` | String(20) | Unique, Length > 0 |
 | | `name` | String(255) | Length > 0 |
-| | `asset_class` | String(50) | Not Null |
+| | `asset_class` | Enum | Not Null |
+| | `isin` | String(12) | Unique, Nullable |
 | | `is_active` | Boolean | Default True |
-| | `created_at` | DateTime | Server Default Now |
-| | `updated_at` | DateTime | Server Default Now |
+| **exchanges** | `id` | Integer | PK, Auto-inc |
+| | `name` | String(255) | Length > 0 |
+| | `mic_code` | String(20) | Unique, Not Null |
+| | `currency` | String(10) | Not Null |
+| **listings** | `id` | Integer | PK, Auto-inc |
+| | `asset_id` | Integer | FK to assets.id |
+| | `exchange_id` | Integer | FK to exchanges.id |
+| | `ticker` | String(20) | Not Null |
+| | `currency` | String(10) | Not Null |
 
 ## 5. Next Steps
 *   Implement Python Core layer (Use Cases).
