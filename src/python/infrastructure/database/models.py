@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, CheckConstraint, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, CheckConstraint, ForeignKey, UniqueConstraint, Enum
 from sqlalchemy.orm import relationship
 from src.python.infrastructure.database.base import Base
 import datetime
+from src.python.core.domain.enums import AssetClass
 
 class ExchangeModel(Base):
     __tablename__ = "exchanges"
@@ -28,7 +29,8 @@ class AssetModel(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False)
-    asset_class = Column(String(50), nullable=False)
+    asset_class = Column(Enum(AssetClass), nullable=False)
+    isin = Column(String(12), unique=True, nullable=True)
     is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
