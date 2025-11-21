@@ -14,11 +14,6 @@ class AssetRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_ticker(self, ticker: str) -> Optional[Asset]:
-        """Retrieves an asset by its Ticker."""
-        pass
-
-    @abstractmethod
     def list_all(self) -> List[Asset]:
         """Lists all assets."""
         pass
