@@ -14,6 +14,7 @@ class SqlAlchemyAssetRepository(AssetRepository):
             id=model.id,
             name=model.name,
             asset_class=model.asset_class,
+            isin=model.isin,
             is_active=model.is_active,
             created_at=model.created_at,
             updated_at=model.updated_at
@@ -23,6 +24,7 @@ class SqlAlchemyAssetRepository(AssetRepository):
         return AssetModel(
             name=domain.name,
             asset_class=domain.asset_class,
+            isin=domain.isin,
             is_active=domain.is_active
         )
 

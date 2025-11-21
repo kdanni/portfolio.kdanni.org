@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from src.python.infrastructure.database.models import Base, ExchangeModel, ListingModel
 from src.python.infrastructure.database.base import get_db_url
 from src.python.core.domain.asset import Asset
+from src.python.core.domain.enums import AssetClass
 from src.python.core.domain.listing import Listing
 from src.python.infrastructure.repositories.asset_repository import SqlAlchemyAssetRepository
 from src.python.infrastructure.repositories.listing_repository import SqlAlchemyListingRepository
@@ -54,12 +55,15 @@ def test_create_asset_and_listing(asset_repo, listing_repo, exchange):
     # 1. Create Asset (Instrument)
     asset = Asset(
         name="Apple Inc.",
-        asset_class="Equity"
+        asset_class=AssetClass.EQUITY,
+        isin="US0378331005"
     )
     created_asset = asset_repo.create(asset)
 
     assert created_asset.id is not None
     assert created_asset.name == "Apple Inc."
+    assert created_asset.asset_class == AssetClass.EQUITY
+    assert created_asset.isin == "US0378331005"
 
     # 2. Create Listing
     listing = Listing(
@@ -93,7 +97,7 @@ def test_multiple_listings_for_asset(asset_repo, listing_repo, exchange, db_sess
     # Create Asset
     asset = Asset(
         name="Rio Tinto",
-        asset_class="Equity"
+        asset_class=AssetClass.EQUITY
     )
     created_asset = asset_repo.create(asset)
 
@@ -123,7 +127,7 @@ def test_multiple_listings_for_asset(asset_repo, listing_repo, exchange, db_sess
     assert "GBP" in currencies
 
 def test_unique_ticker_per_exchange(asset_repo, listing_repo, exchange):
-    asset = Asset(name="Test Corp", asset_class="Equity")
+    asset = Asset(name="Test Corp", asset_class=AssetClass.EQUITY)
     created_asset = asset_repo.create(asset)
 
     listing1 = Listing(
