@@ -13,11 +13,9 @@ The repository is organized into source code (`src`), documentation (`docs`), an
 ├── docs/                   # Documentation (Requirements, Testing, Architecture)
 ├── src/
 │   ├── python/             # Primary Backend (FastAPI)
-│   │   ├── api/            # Controllers (Empty)
-│   │   ├── core/           # Business Logic (Empty)
-│   │   ├── infrastructure/ # DB Access
-│   │   │   ├── database/   # SQLAlchemy Models (AssetModel implemented)
-│   │   │   └── repositories/ # Data Access Objects (Empty)
+│   │   ├── api/            # Routers, Schemas, Dependencies
+│   │   ├── core/           # Domain Entities, Repository Interfaces
+│   │   ├── infrastructure/ # DB Access (Models, Repository Implementations)
 │   │   └── alembic/        # DB Migrations
 │   └── node/               # Secondary Backend (Express)
 │       └── ...             # Setup with package.json
@@ -32,15 +30,19 @@ The repository is organized into source code (`src`), documentation (`docs`), an
 *   **Database:** PostgreSQL is the source of truth.
 
 ### 3.2 Python Backend (Primary)
-*   **Status:** Initial Setup & Partial Infrastructure Layer.
+*   **Status:** Core, Infrastructure, and API Layers Implemented for base entities.
 *   **Framework:** FastAPI (installed).
 *   **ORM:** SQLAlchemy 2.0+ (installed).
 *   **Migrations:** Alembic (configured).
 *   **Dependencies:** Managed via `poetry` (`pyproject.toml` present).
 *   **Implemented Code:**
-    *   `AssetModel` (`src/python/infrastructure/database/models.py`): Defines the `assets` table.
-    *   `ExchangeModel`: Defines the `exchanges` table.
-    *   `ListingModel`: Defines the `listings` table.
+    *   **Domain:** `Asset`, `Exchange`, `Listing` entities defined.
+    *   **Infrastructure:**
+        *   Models: `AssetModel`, `ExchangeModel`, `ListingModel`.
+        *   Repositories: `SqlAlchemyAssetRepository`, `SqlAlchemyExchangeRepository`, `SqlAlchemyListingRepository`.
+    *   **API:**
+        *   Routers: `/assets`, `/exchanges`, `/listings` implemented with CRUD operations.
+        *   Schemas: Pydantic models for request/response validation.
 
 ### 3.3 Node.js Backend (Secondary)
 *   **Status:** Initial Setup.
@@ -70,7 +72,5 @@ Currently, the schema defines three core entities: **Assets**, **Exchanges**, an
 | | `currency` | String(10) | Not Null |
 
 ## 5. Next Steps
-*   Implement Python Core layer (Use Cases).
-*   Implement Python API layer (Endpoints).
 *   Design and implement `Portfolios` schema.
 *   Mirror functionality in Node.js backend.
