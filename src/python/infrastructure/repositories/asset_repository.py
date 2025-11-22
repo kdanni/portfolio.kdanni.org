@@ -1,7 +1,8 @@
 from typing import List, Optional
 
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import Session
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from core.domain.asset import Asset
 from core.repositories.asset_repository import AssetRepository
@@ -50,3 +51,56 @@ class SqlAlchemyAssetRepository(AssetRepository):
         return [self._to_domain(r) for r in results]
 
     # Removed get_by_ticker since ticker is no longer on Asset
+
+    def upsert(self, asset: Asset) -> Asset:
+        model_data = {
+            "name": asset.name,
+            "asset_class": asset.asset_class,
+            "isin": asset.isin,
+            "is_active": asset.is_active,
+            "updated_at": func.now()
+        }
+
+        # We need to decide what constraint to use for conflict.
+        # ISIN is unique but nullable. Name is not unique.
+        # If ISIN is present, use it.
+        # However, `pg_insert` needs a specific constraint.
+        # If ISIN is None, we might just insert new asset or rely on a "soft" deduplication in the service layer.
+        # For now, we assume upsert is mostly for ISIN-based updates or we treat it as create if no ISIN.
+
+        if asset.isin:
+            stmt = pg_insert(AssetModel).values(
+                name=asset.name,
+                asset_class=asset.asset_class,
+                isin=asset.isin,
+                is_active=asset.is_active
+            )
+
+            stmt = stmt.on_conflict_do_update(
+                index_elements=[AssetModel.isin],
+                set_=model_data
+            ).returning(AssetModel)
+
+            result = self.session.execute(stmt).scalar_one()
+            self.session.commit()
+            return self._to_domain(result)
+        else:
+             # If no ISIN, try to find by name and asset_class as a fallback "identity"
+             # This is not perfect as names can change, but better than blind duplicates for things like Crypto
+             stmt = select(AssetModel).where(
+                 AssetModel.name == asset.name,
+                 AssetModel.asset_class == asset.asset_class,
+                 AssetModel.isin == None
+             )
+             existing = self.session.execute(stmt).scalar_one_or_none()
+
+             if existing:
+                 # Update existing
+                 existing.is_active = asset.is_active
+                 # name/class are same
+                 existing.updated_at = func.now()
+                 self.session.commit()
+                 self.session.refresh(existing)
+                 return self._to_domain(existing)
+             else:
+                 return self.create(asset)

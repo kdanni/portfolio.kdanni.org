@@ -1,7 +1,8 @@
 from typing import List, Optional
 
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import Session
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from core.domain.listing import Listing
 from core.repositories.listing_repository import ListingRepository
@@ -55,3 +56,29 @@ class SqlAlchemyListingRepository(ListingRepository):
         stmt = select(ListingModel).where(ListingModel.asset_id == asset_id)
         results = self.session.execute(stmt).scalars().all()
         return [self._to_domain(r) for r in results]
+
+    def upsert(self, listing: Listing) -> Listing:
+        model_data = {
+            "currency": listing.currency,
+            "is_active": listing.is_active,
+            "updated_at": func.now()
+        }
+
+        # Listings have a unique constraint on (ticker, exchange_id)
+
+        stmt = pg_insert(ListingModel).values(
+            asset_id=listing.asset_id,
+            exchange_id=listing.exchange_id,
+            ticker=listing.ticker,
+            currency=listing.currency,
+            is_active=listing.is_active
+        )
+
+        stmt = stmt.on_conflict_do_update(
+            index_elements=[ListingModel.ticker, ListingModel.exchange_id],
+            set_=model_data
+        ).returning(ListingModel)
+
+        result = self.session.execute(stmt).scalar_one()
+        self.session.commit()
+        return self._to_domain(result)
