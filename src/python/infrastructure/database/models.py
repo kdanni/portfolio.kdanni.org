@@ -1,8 +1,10 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, CheckConstraint, ForeignKey, UniqueConstraint, Enum
-from sqlalchemy.orm import relationship
-from src.python.infrastructure.database.base import Base
 import datetime
-from src.python.core.domain.enums import AssetClass
+
+from sqlalchemy import Boolean, CheckConstraint, Column, DateTime, Enum, ForeignKey, Integer, String, UniqueConstraint, func
+from sqlalchemy.orm import relationship
+
+from infrastructure.database.base import Base
+from core.domain.enums import AssetClass
 
 class ExchangeModel(Base):
     __tablename__ = "exchanges"

@@ -1,13 +1,14 @@
 import pytest
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
-from src.python.infrastructure.database.models import Base, ExchangeModel, ListingModel
-from src.python.infrastructure.database.base import get_db_url
-from src.python.core.domain.asset import Asset
-from src.python.core.domain.enums import AssetClass
-from src.python.core.domain.listing import Listing
-from src.python.infrastructure.repositories.asset_repository import SqlAlchemyAssetRepository
-from src.python.infrastructure.repositories.listing_repository import SqlAlchemyListingRepository
+
+from core.domain.asset import Asset
+from core.domain.enums import AssetClass
+from core.domain.listing import Listing
+from infrastructure.database.base import get_db_url
+from infrastructure.database.models import Base, ExchangeModel, ListingModel
+from infrastructure.repositories.asset_repository import SqlAlchemyAssetRepository
+from infrastructure.repositories.listing_repository import SqlAlchemyListingRepository
 
 @pytest.fixture(scope="module")
 def db_engine():

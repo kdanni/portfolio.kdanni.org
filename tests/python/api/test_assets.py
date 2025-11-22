@@ -2,10 +2,11 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
-from src.python.api.main import app
-from src.python.infrastructure.database.base import Base
-from src.python.infrastructure.database.session import get_session
-from src.python.core.domain.enums import AssetClass
+
+from api.main import app
+from infrastructure.database.base import Base
+from infrastructure.database.session import get_session
+from core.domain.enums import AssetClass
 
 # Setup in-memory SQLite database for testing
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"

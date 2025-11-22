@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from src.python.infrastructure.database.base import get_db_url
+
+from infrastructure.database.base import get_db_url
 
 # Create the engine using the URL from base.py
 engine = create_engine(get_db_url())

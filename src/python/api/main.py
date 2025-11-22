@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from src.python.api.routers import assets
+
+from api.routers import assets
 
 app = FastAPI(
     title="Asset Manager API",

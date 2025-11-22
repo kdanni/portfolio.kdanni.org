@@ -7,13 +7,11 @@ from sqlalchemy import pool
 
 from alembic import context
 
-# Add project root to path so we can import modules as src.python...
-# We need to go up 3 levels from src/python/alembic/env.py to reach the root
-# (src/python/alembic -> src/python -> src -> root)
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
+# Add the project source directory to the path so Alembic can import modules
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.python.infrastructure.database.models import Base, AssetModel # Import models to register metadata
-from src.python.infrastructure.database.base import get_db_url
+from infrastructure.database.models import Base, AssetModel  # Import models to register metadata
+from infrastructure.database.base import get_db_url
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

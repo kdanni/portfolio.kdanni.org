@@ -1,9 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
-from src.python.api.schemas.assets import AssetCreate, AssetResponse
-from src.python.core.domain.asset import Asset
-from src.python.core.repositories.asset_repository import AssetRepository
-from src.python.api.dependencies import get_asset_repository
+
+from fastapi import APIRouter, Depends, HTTPException, status
+
+from api.schemas.assets import AssetCreate, AssetResponse
+from core.domain.asset import Asset
+from core.repositories.asset_repository import AssetRepository
+from api.dependencies import get_asset_repository
 
 router = APIRouter(
     prefix="/assets",

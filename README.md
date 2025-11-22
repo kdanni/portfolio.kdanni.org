@@ -43,7 +43,7 @@ AssetManager is a lightweight, robust backend system for managing financial asse
     ```
     This spins up a PostgreSQL instance on port 5432.
 
-2.  **Python Setup**:
+2.  **Python Setup** (run these from the `src/python` directory to pick up the local packages):
     ```bash
     cd src/python
     poetry install
@@ -51,10 +51,11 @@ AssetManager is a lightweight, robust backend system for managing financial asse
     poetry run alembic upgrade head
     ```
 
+    If you prefer to stay at the repository root, export `PYTHONPATH=src/python` so Python can find the modules.
+
 3.  **Run the API Server**:
-    To start the FastAPI development server:
+    To start the FastAPI development server (from `src/python`):
     ```bash
-    # From src/python
     poetry run fastapi dev api/main.py
     ```
     Or using uvicorn directly:
