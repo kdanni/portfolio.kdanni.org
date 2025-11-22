@@ -1,8 +1,10 @@
-from typing import Optional, List
+from typing import List, Optional
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from src.python.core.domain.listing import Listing
-from src.python.infrastructure.database.models import ListingModel
+
+from core.domain.listing import Listing
+from infrastructure.database.models import ListingModel
 
 class SqlAlchemyListingRepository:
     def __init__(self, session: Session):

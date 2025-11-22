@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List
-from src.python.core.domain.asset import Asset
+from typing import List, Optional
+
+from core.domain.asset import Asset
 
 class AssetRepository(ABC):
     @abstractmethod

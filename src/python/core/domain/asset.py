@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
-from src.python.core.domain.enums import AssetClass
+
+from core.domain.enums import AssetClass
 
 @dataclass
 class Asset:

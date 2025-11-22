@@ -1,7 +1,9 @@
-from pydantic import BaseModel, Field
-from typing import Optional
 from datetime import datetime
-from src.python.core.domain.enums import AssetClass
+from typing import Optional
+
+from pydantic import BaseModel, Field
+
+from core.domain.enums import AssetClass
 
 class AssetCreate(BaseModel):
     name: str = Field(..., min_length=1, description="The name of the asset")
