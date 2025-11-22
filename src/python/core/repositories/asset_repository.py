@@ -18,3 +18,8 @@ class AssetRepository(ABC):
     def list_all(self) -> List[Asset]:
         """Lists all assets."""
         pass
+
+    @abstractmethod
+    def upsert(self, asset: Asset) -> Asset:
+        """Upserts an asset based on unique constraints (e.g. ISIN) or name."""
+        pass

@@ -23,3 +23,8 @@ class ListingRepository(ABC):
     def get_by_asset_id(self, asset_id: int) -> List[Listing]:
         """Retrieves listings for a specific asset."""
         pass
+
+    @abstractmethod
+    def upsert(self, listing: Listing) -> Listing:
+        """Upserts a listing based on unique constraints (ticker + exchange)."""
+        pass

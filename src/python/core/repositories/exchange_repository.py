@@ -18,3 +18,13 @@ class ExchangeRepository(ABC):
     def list_all(self) -> List[Exchange]:
         """Lists all exchanges."""
         pass
+
+    @abstractmethod
+    def upsert(self, exchange: Exchange) -> Exchange:
+        """Upserts an exchange based on unique constraints (MIC code)."""
+        pass
+
+    @abstractmethod
+    def get_by_mic_code(self, mic_code: str) -> Optional[Exchange]:
+        """Retrieves an exchange by its MIC code."""
+        pass

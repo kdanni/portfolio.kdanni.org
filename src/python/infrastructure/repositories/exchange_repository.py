@@ -1,7 +1,8 @@
 from typing import List, Optional
 
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import Session
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from core.domain.exchange import Exchange
 from core.repositories.exchange_repository import ExchangeRepository
@@ -48,3 +49,34 @@ class SqlAlchemyExchangeRepository(ExchangeRepository):
         stmt = select(ExchangeModel)
         results = self.session.execute(stmt).scalars().all()
         return [self._to_domain(r) for r in results]
+
+    def upsert(self, exchange: Exchange) -> Exchange:
+        model_data = {
+            "name": exchange.name,
+            "currency": exchange.currency,
+            "is_active": exchange.is_active,
+            "updated_at": func.now()
+        }
+
+        stmt = pg_insert(ExchangeModel).values(
+            name=exchange.name,
+            mic_code=exchange.mic_code,
+            currency=exchange.currency,
+            is_active=exchange.is_active
+        )
+
+        stmt = stmt.on_conflict_do_update(
+            index_elements=[ExchangeModel.mic_code],
+            set_=model_data
+        ).returning(ExchangeModel)
+
+        result = self.session.execute(stmt).scalar_one()
+        self.session.commit()
+        return self._to_domain(result)
+
+    def get_by_mic_code(self, mic_code: str) -> Optional[Exchange]:
+        stmt = select(ExchangeModel).where(ExchangeModel.mic_code == mic_code)
+        result = self.session.execute(stmt).scalar_one_or_none()
+        if result:
+            return self._to_domain(result)
+        return None

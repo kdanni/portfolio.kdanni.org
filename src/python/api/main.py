@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from api.routers import assets, exchanges, listings
+from api.routers import assets, exchanges, listings, admin
 
 app = FastAPI(
     title="Asset Manager API",
@@ -11,6 +11,7 @@ app = FastAPI(
 app.include_router(assets.router)
 app.include_router(exchanges.router)
 app.include_router(listings.router)
+app.include_router(admin.router, prefix="/admin", tags=["Admin"])
 
 @app.get("/health")
 def health_check():
